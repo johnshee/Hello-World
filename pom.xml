@@ -16,6 +16,8 @@
     <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
   </properties>
 
+  <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+         
   <modules>
     <module>server</module>
   </modules>             
