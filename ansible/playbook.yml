@@ -60,6 +60,7 @@
     - name: Download and deploy artifacts
       block:  
       - name: Deploying artifacts
+        become: yes
         become_user: ubuntu
         ansible.builtin.copy: 
            src: /var/lib/jenkins/workspace/generic_build/server/target/server.jar 
