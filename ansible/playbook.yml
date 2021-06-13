@@ -3,7 +3,7 @@
   connection: local
   gather_facts: False
   vars:
-    key_name: my_aws
+    key_name: aws_key
     region: us-west-2
     image: ami-03d5c68bab01f3496
     id: "web-app"
