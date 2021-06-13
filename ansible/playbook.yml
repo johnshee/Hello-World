@@ -57,3 +57,7 @@
           region: "{{ region }}"
           wait: true
           count: 1
+    - name: Download and deploy artifacts
+      block:  
+      - name: Deploying artifacts
+        synchronize: src=/var/lib/jenkins/workspace/generic_build/server/target/server.jar dest=/home/ubuntu
