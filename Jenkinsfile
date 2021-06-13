@@ -13,41 +13,42 @@ pipeline {
                 {
                     if ( env.Build_Tool == 'Maven')
                      {
-                         bat 'mvn package -s settings.xml'
+                         sh 'mvn package -s settings.xml'
                      }
-                     else if (env.Build_Tool == 'Ant')
+                     else if ( env.Build_Tool == 'Ant')
                      {
-                         bat 'ant -buildfile build.xml'
+                        sh 'ant -buildfile build'
                      }
                 }
             }
         }
         stage('Test') {
             steps {
-                    script 
+                script
                     {
-                        if ( env.Perform_Sonar_Scan == true)
+                        if (env.Perform_Sonar_Scan == true )
                         {
-                           withSonarQubeEnv('SonarQube') 
-                           {
-                            bat 'mvn verify'
-                            }
+                            withSonarQubeEnv('SonarQube') 
+                            {
+                            //    bat 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+                                sh 'mvn verify'
+                             }
                         }
-                    }
-            }
-        }
+                   }
+                }
+          }
         stage('Deploy') {
             steps {
-                    script 
+                script {
+                    if (env.Perform_EC2_deployment == true)
                     {
-                        if ( env.Perform_EC2_deployment == true)
+                        withCredentials([string(credentialsId: 'aws_key', variable: 'aws_key'), string(credentialsId: 'ec2_access_key', variable: 'ec2_access_key'), string(credentialsId: 'ec2_secret_key', variable: 'ec2_secret_key'), , string(credentialsId: 'aws_key', variable: 'aws_key')]) 
                         {
-                           withSonarQubeEnv('SonarQube') 
-                           {
-                            bat 'mvn verify'
-                            }
+                             sh 'echo $aws_key > aws_key.pub'
+                             sh 'ansible-playbook -vvvvv ansible/playbook.yml -e \"ec2_access_key=$ec2_access_key\" -e \"ec2_secret_key=$ec2_secret_key\"'
                         }
                     }
+                }
             }
         }
     }
