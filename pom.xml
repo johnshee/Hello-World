@@ -15,9 +15,6 @@
     <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
     <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
-    <sonar.projectKey>acenawaz01_Hello-World-Code</sonar.projectKey>
-    <sonar.organization>acenawaz01</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
 
          
