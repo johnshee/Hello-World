@@ -13,11 +13,11 @@ pipeline {
                 {
                     if ( env.Build_Tool == 'Maven')
                      {
-                         sh 'mvn package -s settings.xml'
+                         bat 'mvn package -s settings.xml'
                      }
                      else if ( env.Build_Tool == 'Ant')
                      {
-                        sh 'ant -buildfile build'
+                         bat 'ant -buildfile build'
                      }
                 }
             }
@@ -28,7 +28,7 @@ pipeline {
                     {
                         if (env.Perform_Sonar_Scan == 'true' )
                         {
-                                sh 'mvn sonar:sonar -Dsonar.projectKey=cicd-solution -Dsonar.host.url=https://c951da7c7c5331.localhost.run -Dsonar.login=5278e2ccf6aea994ccdb4f356be5f4e4df923f7f'
+                                bat 'mvn sonar:sonar -Dsonar.projectKey=sonarqubetest -Dsonar.host.url=http://localhost:9000 -Dsonar.login=d62607ff66391e8faeed90024ba205dc8cda4d2b'
                         }
                    }
                 }
@@ -40,8 +40,8 @@ pipeline {
                     {
                         withCredentials([string(credentialsId: 'aws_key', variable: 'aws_key'), string(credentialsId: 'ec2_access_key', variable: 'ec2_access_key'), string(credentialsId: 'ec2_secret_key', variable: 'ec2_secret_key'), , string(credentialsId: 'aws_key', variable: 'aws_key')]) 
                         {
-                             sh 'echo $aws_key > aws_key.pub'
-                             sh 'ansible-playbook -vvvvv ansible/playbook.yml -e \"ec2_access_key=$ec2_access_key\" -e \"ec2_secret_key=$ec2_secret_key\"'
+                             bat 'echo $aws_key > aws_key.pub'
+                             bat 'ansible-playbook -vvvvv ansible/playbook.yml -e \"ec2_access_key=$ec2_access_key\" -e \"ec2_secret_key=$ec2_secret_key\"'
                         }
                     }
                 }
