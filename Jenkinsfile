@@ -28,7 +28,8 @@ pipeline {
                     {
                         if (env.Perform_Sonar_Scan == 'true' )
                         {
-                                sh 'mvn sonar:sonar -Dsonar.projectKey=sonarqubetest -Dsonar.host.url=https://a0d8bb14f92d5e.localhost.run/ -Dsonar.login=d62607ff66391e8faeed90024ba205dc8cda4d2b'
+                                
+                                sh 'mvn sonar:sonar -Dsonar.projectKey=ignite -Dsonar.host.url=http://34.224.62.5:8080 -Dsonar.login=31e9775aeb78c139202e47b507b0a3a84bc3636b'
                         }
                    }
                 }
