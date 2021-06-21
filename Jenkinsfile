@@ -39,9 +39,9 @@ pipeline {
                 script {
                     if (env.Perform_EC2_deployment == 'true')
                     {
-                        withCredentials([string(credentialsId: 'aws_key', variable: 'aws_key'), string(credentialsId: 'ec2_access_key', variable: 'ec2_access_key'), string(credentialsId: 'ec2_secret_key', variable: 'ec2_secret_key'), , string(credentialsId: 'aws_key', variable: 'aws_key')]) 
+                        withCredentials([string(credentialsId: 'reusablepipeline_key', variable: 'reusablepipeline_key'), string(credentialsId: 'ec2_access_key', variable: 'ec2_access_key'), string(credentialsId: 'ec2_secret_key', variable: 'ec2_secret_key'), , string(credentialsId: 'reusablepipeline_key', variable: 'reusablepipeline_key')]) 
                         {
-                             sh 'echo $aws_key > aws_key.pub'
+                             sh 'echo $reusablepipeline_key > reusablepipeline_key.pub'
                              sh 'ansible-playbook -vvvvv ansible/playbook.yml -e \"ec2_access_key=$ec2_access_key\" -e \"ec2_secret_key=$ec2_secret_key\"'
                         }
                     }
