@@ -3,38 +3,19 @@
   connection: local
   gather_facts: False
   vars:
-    key_name: aws_key
-    region: us-west-2
-    image: ami-03d5c68bab01f3496
+    key_name: reusablepipeline_key
+    region: us-east-1
+    image: ami-0aeeebd8d2ab47354
     id: "web-app"
     sec_group: "{{ id }}-sec"
   tasks:
-    - name: Facts
-      block:
-      - name: Get instances facts
-        ec2_instance_info:
-          aws_access_key: "{{ec2_access_key}}"
-          aws_secret_key: "{{ec2_secret_key}}"
-          region: "{{ region }}"
-        register: result
-      - name: Instances ID
-        debug:
-          msg: "ID: {{ item.instance_id }} - State: {{ item.state.name }} - Public DNS: {{ item.public_dns_name }}"
-        loop: "{{ result.instances }}"
     - name: Provisioning EC2 instances
-      block:  
-      - name: Upload public key to AWS
-        ec2_key:
-          name: "{{ key_name }}"
-          key_material: "{{ lookup('file', '../{{ key_name }}.pub') }}"
-          region: "{{ region }}"
-          aws_access_key: "{{ec2_access_key}}"
-          aws_secret_key: "{{ec2_secret_key}}"
+      block:
       - name: Create security group
-        ec2_group:
+        amazon.aws.ec2_group:
           name: "{{ sec_group }}"
           description: "Sec group for app {{ id }}"
-          # vpc_id: 12345
+          vpc_id: vpc-58d42b25
           region: "{{ region }}"
           aws_access_key: "{{ec2_access_key}}"
           aws_secret_key: "{{ec2_secret_key}}"
@@ -46,20 +27,21 @@
               rule_desc: allow all on ssh port
         register: result_sec_group
       - name: Provision instance(s)
-        ec2:
+        amazon.aws.ec2:
           aws_access_key: "{{ec2_access_key}}"
           aws_secret_key: "{{ec2_secret_key}}"
           key_name: "{{ key_name }}"
           id: "{{ id }}"
-          group_id: "{{ result_sec_group.group_id }}"
+          group: "{{ sec_group }}"
           image: "{{ image }}"
           instance_type: t2.micro
           region: "{{ region }}"
+          vpc_subnet_id: subnet-8408a6a5
           wait: true
           count: 1
     - name: Download and deploy artifacts
-      block:  
+      block:
       - name: Deploying artifacts
-        ansible.builtin.copy: 
-           src: /var/lib/jenkins/workspace/generic_build/server/target/server.jar 
-           dest: /tmp/server.jar 
+        ansible.builtin.copy:
+           src: /var/lib/jenkins/workspace/generic_build/server/target/server.jar
+           dest: /tmp/server.jar
