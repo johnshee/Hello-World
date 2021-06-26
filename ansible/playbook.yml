@@ -26,6 +26,8 @@
       register: result_sec_group
     - name: Provision instance(s)
       ec2:
+        tags:
+          Name: "ProjectIgnite"
         aws_access_key: "{{ec2_access_key}}"
         aws_secret_key: "{{ec2_secret_key}}"
         key_name: "{{ key_name }}"
