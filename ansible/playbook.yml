@@ -24,8 +24,17 @@
             cidr_ip: 0.0.0.0/0
             rule_desc: allow all on ssh port
       register: result_sec_group
-    - name: Provision instance(s)
+      name: Provision a set of instances
       ec2:
+         key_name: my_key
+         group: test
+         instance_type: t2.micro
+         image: "{{ ami_id }}"
+         wait: true
+         exact_count: 5
+         instance_tags:
+            Name: PipelineDemo
+      register: ec2
         aws_access_key: "{{ec2_access_key}}"
         aws_secret_key: "{{ec2_secret_key}}"
         key_name: "{{ key_name }}"
